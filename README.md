@@ -5,8 +5,39 @@
 
 [![Design Documents](/docs/design_docs.png "Million and Up Design Documents")](/docs/README.md)
 
+## How to use
 
+Please read and execute each step below:
 
+### Step 1
+
+Create and use Python Virtual Environment:
+
+```bash
+$promt python -m venv .venv
+$promt source .venv/bin/activate
+```
+
+### Step 2
+
+Install all Python Requirements:
+
+```bash
+$promt python -m pip install -U pip
+$promt pip install -r requirements.txt
+```
+
+### Optional
+
+Generate a requirements file and then install from it in another environment:
+
+```bash
+$promt pip freeze > requirements.txt
+```
+
+---
+
+***That's all for now ...***
 
 ---
 
