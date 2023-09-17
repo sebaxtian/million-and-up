@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 
+from .config.settings import settings
 
-app = FastAPI(
-    version="0.1.0",
-    title="Auth"
-)
+app = FastAPI(version=settings.version, title=settings.name)
