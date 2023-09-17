@@ -31,6 +31,24 @@ Generate a requirements file and then install from it in another environment:
 $promt pip freeze > requirements.txt
 ```
 
+## Settings Management
+
+Before running you should create the environment variables file and the secrets files.
+
+### Environment Variables
+
+Create a new **.env** file inside the auth directory and use the environment variables as you can see in the [example.env](example.env) file just change the values. This file will be ignored and never will be committed to the repository.
+
+## Secret Files
+
+Create secret files inside the **secrets** directory, those files will be ignored and never will be committed to the repository.
+
+The secret files below are required:
+
+- admin_pwd
+- admin_user
+- mongodb_url
+
 ## How to run
 
 > **Development Mode**
