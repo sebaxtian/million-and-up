@@ -37,6 +37,12 @@ $promt pip freeze > requirements.txt
 
 ---
 
+## Applications
+
+Documentation about each application created by Million and Up can be found in the directory [apps](/apps/README.md)
+
+---
+
 ***That's all for now ...***
 
 ---
