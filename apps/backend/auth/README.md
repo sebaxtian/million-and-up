@@ -51,6 +51,10 @@ The secret files below are required:
     - [Default: admin]
 - mongodb_url
     - [Default: mongodb://admin:admin@localhost:27017/auth?authSource=admin]
+- jwt_secret_key
+    - [Default: to get a string run: openssl rand -hex 32]
+- jwt_algorithm
+    - [Default: HS256]
 
 ## How to run
 

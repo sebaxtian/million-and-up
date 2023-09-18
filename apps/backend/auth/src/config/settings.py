@@ -5,10 +5,10 @@ from pydantic_settings import BaseSettings
 
 # Constants
 MISSING_SECRET = ">>> missing SECRETS file <<<"
-""" Error message for missing secrets file. """
+""" Error message for missing secrets file """
 
 MISSING_ENV = ">>> missing ENV value <<<"
-""" Error message for missing values in the .env file. """
+""" Error message for missing values in the .env file """
 
 
 class Settings(BaseSettings):
