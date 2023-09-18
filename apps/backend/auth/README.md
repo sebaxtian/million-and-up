@@ -46,8 +46,11 @@ Create secret files inside the **secrets** directory, those files will be ignore
 The secret files below are required:
 
 - admin_pwd
+    - [Default: admin]
 - admin_user
+    - [Default: admin]
 - mongodb_url
+    - [Default: mongodb://admin:admin@localhost:27017/auth?authSource=admin]
 
 ## How to run
 
