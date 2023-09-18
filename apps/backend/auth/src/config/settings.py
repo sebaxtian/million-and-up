@@ -26,6 +26,14 @@ class Settings(BaseSettings):
     admin_user: str = MISSING_SECRET
     admin_pwd: str = MISSING_SECRET
 
+    # to create JWTs
+    # to get a string run: openssl rand -hex 32
+    jwt_secret_key: str = MISSING_SECRET
+    # HS256
+    jwt_algorithm: str = MISSING_SECRET
+    # access token expire time
+    access_token_expire_minutes: int = MISSING_ENV
+
     # Handles both local and Docker environments.
     class Config:
         secrets_dir = (
