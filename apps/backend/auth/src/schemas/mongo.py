@@ -11,11 +11,6 @@ class MongoBase(BaseModel):
     We can use that to our advantage
     """
 
-    class Config:
-        """basic config"""
-
-        orm_mode = True
-
     @classmethod
     def from_mongo(cls, data: dict) -> Callable:
         """Convert "_id" (str object) into "id" (UUID object)"""
@@ -24,7 +19,7 @@ class MongoBase(BaseModel):
             return data
 
         mongo_id = data.pop("_id", None)
-        return cls(**dict(data, id=mongo_id))
+        return cls(**dict(data, id=str(mongo_id)))
 
     def to_mongo(self, **kwargs) -> dict:
         """Convert "id" (UUID object) into "_id" (str object)"""

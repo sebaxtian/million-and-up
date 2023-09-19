@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from mongo import MongoBase
-from pydantic import UUID4
+from .mongo import MongoBase
 
 
 class UserBase(MongoBase):
@@ -10,7 +9,7 @@ class UserBase(MongoBase):
     email: str
     username: str
     full_name: str
-    role: str
+    role: str = "admin"
     disabled: bool = False
 
 
@@ -36,7 +35,7 @@ class UserUpdate(UserBase):
 class UserDB(UserBase):
     """User DB representation"""
 
-    id: UUID4
+    id: str
     hashed_password: str
     created: datetime
     updated: datetime
@@ -45,6 +44,6 @@ class UserDB(UserBase):
 class UserSchema(UserBase):
     """User Schema representation"""
 
-    id: UUID4
+    id: str
     created: datetime
     updated: datetime

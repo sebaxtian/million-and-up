@@ -1,14 +1,15 @@
 from datetime import datetime, timedelta
 from typing import Annotated
 
-from config.settings import settings
-from db.motor import Motor
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from schemas.token import TokenData
-from schemas.user import UserDB
+
+from .config.settings import settings
+from .db.motor import Motor
+from .schemas.token import TokenData
+from .schemas.user import UserDB
 
 # used to hash and verify passwords
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -47,7 +48,7 @@ async def get_user(username: str) -> UserDB:
     """
     Find user from db by 'username' and then return the user
     """
-    result = await Motor.auth.users.find_one({"username": username})
+    result = await Motor.db.users.find_one({"username": username})
 
     return UserDB.from_mongo(result)
 
