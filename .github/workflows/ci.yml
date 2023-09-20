@@ -67,6 +67,11 @@ jobs:
       # Testing your code
       # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#testing-your-code
       - name: Test with pytest
+        env:
+          name: Auth
+          version: 0.0.0
+          build_env: TEST
+          access_token_expire_minutes: 30
         run: |
           pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src
 
