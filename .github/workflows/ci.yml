@@ -1,0 +1,81 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Assigning permissions to jobs
+# https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+permissions:
+  contents: read
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "auth-ms" running pytest
+  auth-ms:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4.0.0
+
+      # Using a specific Python version
+      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#using-a-specific-python-version
+      - name: Set up Python 3.11.5
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.11.5'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+          #cache: 'pip' #TODO: check documentation about cache
+      
+      # Print current python version
+      - name: Python Version
+        run: python -c "import sys; print(sys.version)"
+      
+      # Installing dependencies
+      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#installing-dependencies
+      - name: Install Dependencies
+        run: python -m pip install --upgrade pip
+      
+      # Install dependencies from apps/backend/auth/requirements.txt
+      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#requirements-file
+      - name: Requirements File
+        run: |
+          pip install -r apps/backend/auth/requirements.txt
+      
+      # Using Ruff to lint code
+      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#using-ruff-to-lint-code
+      - name: Lint with Ruff
+        run: |
+          pip install ruff
+          ruff --format=github --target-version=py311 apps/backend/auth/
+        continue-on-error: false
+      
+      # Testing your code
+      # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#testing-your-code
+      - name: Test with pytest
+        run: |
+          pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
