@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     # access token expire time
     access_token_expire_minutes: int = MISSING_ENV
 
+    # pytest mode
+    pytest_mode: bool = False
+
     # Handles both local and Docker environments.
     class Config:
         secrets_dir = (

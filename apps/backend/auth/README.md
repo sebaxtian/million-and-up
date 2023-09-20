@@ -10,8 +10,8 @@ Please read and execute each step below:
 Create and use Python Virtual Environment:
 
 ```bash
-$promt python -m venv .venv
-$promt source .venv/bin/activate
+$promt> python -m venv .venv
+$promt> source .venv/bin/activate
 ```
 
 ### Step 2
@@ -19,8 +19,8 @@ $promt source .venv/bin/activate
 Install all Python Requirements:
 
 ```bash
-$promt python -m pip install -U pip
-$promt pip install -r requirements.txt
+$promt> python -m pip install -U pip
+$promt> pip install -r requirements.txt
 ```
 
 ### Optional
@@ -28,7 +28,7 @@ $promt pip install -r requirements.txt
 Generate a requirements file and then install from it in another environment:
 
 ```bash
-$promt pip freeze > requirements.txt
+$promt> pip freeze > requirements.txt
 ```
 
 ## Settings Management
@@ -56,10 +56,16 @@ The secret files below are required:
 - jwt_algorithm
     - [Default: HS256]
 
+## Testing
+
+```bash
+$promt> pytest -v -s -W ignore::DeprecationWarning
+```
+
 ## How to run
 
 > **Development Mode**
 
 ```bash
-$promt python run.py
+$promt> python run.py
 ```

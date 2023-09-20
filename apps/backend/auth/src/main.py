@@ -5,6 +5,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from .config.settings import settings
+from .crud.user import UserCRUD
 from .db.motor import Motor
 from .routers import auth
 from .schemas.token import TokenSchema
@@ -43,27 +44,28 @@ async def token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 @app.on_event("startup")
 async def open_db_conn():
     """Initialize DB connection"""
-
-    await Motor.connect()
-    # Create admin user once
-    result = await Motor.db.users.find_one({"username": "admin"})
-    if not result:
-        admin = UserCreate(
-            email="admin@example.com",
-            username=settings.admin_user,
-            full_name="Admin User",
-            hashed_password=get_password_hash(settings.admin_pwd),
-        )
-        result = await Motor.db.users.insert_one(admin.to_mongo())
+    # Only when doesnt run pytest unit tests
+    if not settings.pytest_mode:
+        await Motor.connect()
+        # Create admin user once
+        result = await UserCRUD.get_by_username("admin")
         if not result:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Admin User can not be created!",
+            admin = UserCreate(
+                email="admin@example.com",
+                username=settings.admin_user,
+                full_name="Admin User",
+                hashed_password=get_password_hash(settings.admin_pwd),
             )
+            result = await UserCRUD.create(admin)
+            if not result:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Admin User can not be created!",
+                )
 
 
 @app.on_event("shutdown")
 async def close_db_conn():
     """Close DB connection"""
-
-    await Motor.close()
+    if not settings.pytest_mode:
+        await Motor.close()

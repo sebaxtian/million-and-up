@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from .config.settings import settings
-from .db.motor import Motor
+from .crud.user import UserCRUD
 from .schemas.token import TokenData
 from .schemas.user import UserDB
 
@@ -48,9 +48,7 @@ async def get_user(username: str) -> UserDB:
     """
     Find user from db by 'username' and then return the user
     """
-    result = await Motor.db.users.find_one({"username": username})
-
-    return UserDB.from_mongo(result)
+    return await UserCRUD.get_by_username(username)
 
 
 async def authenticate_user(username: str, password: str) -> UserDB | bool:
