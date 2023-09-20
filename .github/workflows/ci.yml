@@ -39,7 +39,7 @@ jobs:
           python-version: '3.11.5'
           # Optional - x64 or x86 architecture, defaults to x64
           architecture: 'x64'
-          cache: 'pip'
+          #cache: 'pip' #TODO: check documentation about cache
       
       # Print current python version
       - name: Python Version
