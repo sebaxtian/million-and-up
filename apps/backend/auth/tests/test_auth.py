@@ -49,7 +49,7 @@ def test_users_me(test_app, userdb_fixture):
     # HTTP headers
     headers = {
         "accept": "application/json",
-        "Authorization": f"{response.json()['token_type']} {response.json()['access_token']}",
+        "Authorization": f"{response.json()['token_type']} {response.json()['access_token']}",  # noqa: E501
     }
 
     # Endpoint to be tested
