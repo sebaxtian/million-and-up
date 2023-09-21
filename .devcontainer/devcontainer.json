@@ -18,8 +18,8 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// https://hub.docker.com/_/mongo
-	// docker exec -it dev-mongo mongosh --host localhost -u admin -p admin --authenticationDatabase admin
-	"postCreateCommand": "if [ ! $(docker ps -a -f name=dev-mongo -q) ]; then docker run -d --name dev-mongo -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin mongo:6; fi",
+	// docker exec -it dev-mongo mongosh --host localhost -u admin -p admin --authenticationDatabase admin auth
+	"postCreateCommand": "if [ ! $(docker ps -a -f name=dev-mongo -q) ]; then docker run -d --name dev-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -e MONGO_INITDB_DATABASE=auth mongo:6; fi",
 	"postStartCommand": "if [ $(docker ps -a -f name=dev-mongo -f status=exited -q) ]; then docker restart dev-mongo; fi",
 
 	// Configure tool-specific properties.
