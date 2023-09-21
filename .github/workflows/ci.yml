@@ -72,6 +72,8 @@ jobs:
           version: 0.0.0
           build_env: TEST
           access_token_expire_minutes: 30
+          jwt_algorithm: HS256
+          jwt_secret_key: 591e6e6715cd253bf9316268bf5b4da57476fd6cf64fedb6b5c56ed7b84acee5
         run: |
           pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src
 
