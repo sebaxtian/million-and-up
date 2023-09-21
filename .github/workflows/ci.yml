@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -66,7 +66,7 @@ jobs:
       
       # Testing your code
       # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#testing-your-code
-      - name: Test with pytest
+      - name: Testing
         env:
           name: Auth
           version: 0.0.0
@@ -76,13 +76,3 @@ jobs:
           jwt_secret_key: 591e6e6715cd253bf9316268bf5b4da57476fd6cf64fedb6b5c56ed7b84acee5
         run: |
           pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
