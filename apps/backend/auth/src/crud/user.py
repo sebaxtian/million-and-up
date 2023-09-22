@@ -6,6 +6,7 @@ class UserCRUD:
     """
     User CRUD opperations using static class methods
     """
+
     @classmethod
     async def get_by_username(cls, username: str) -> UserDB:
         """Get User in DB collection users
