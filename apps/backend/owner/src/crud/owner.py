@@ -1,5 +1,6 @@
 from typing import List
 
+from bson import ObjectId
 from pymongo import ReturnDocument
 
 from ..db.motor import Motor
@@ -32,12 +33,12 @@ class OwnerCRUD:
         :return: OwnerSchema
         """
         result = await Motor.db.owners.find_one_and_update(
-            {"_id": id},
-            {"$set": owner.to_mongo()},
+            {"_id": ObjectId(id)},
+            {"$set": owner.to_mongo(exclude_none=True)},
             return_document=ReturnDocument.AFTER,
         )
 
-        return result
+        return OwnerSchema.from_mongo(result)
 
     @classmethod
     async def delete(cls, id: str) -> bool:
@@ -45,7 +46,7 @@ class OwnerCRUD:
         :param id: str Owner ID
         :return: bool
         """
-        result = await Motor.db.owners.delete_one({"_id": id})
+        result = await Motor.db.owners.delete_one({"_id": ObjectId(id)})
 
         if result.deleted_count > 0:
             return True
@@ -69,7 +70,7 @@ class OwnerCRUD:
         :param id: str Owner ID
         :return: OwnerSchema
         """
-        result = await Motor.db.owners.find_one({"_id": id})
+        result = await Motor.db.owners.find_one({"_id": ObjectId(id)})
 
         return OwnerSchema.from_mongo(result)
 

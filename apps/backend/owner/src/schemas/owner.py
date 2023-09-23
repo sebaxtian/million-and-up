@@ -1,4 +1,7 @@
 from datetime import datetime, timedelta, timezone
+from typing import Optional
+
+from pydantic import Field
 
 from .mongo import MongoBase
 
@@ -20,11 +23,28 @@ class OwnerCreate(OwnerBase):
     updated: datetime = created
 
 
-class OwnerUpdate(OwnerBase):
+class OwnerPatch(OwnerBase):
+    """
+    Patch Owner attributes
+    """
+
+    name: Optional[str] = None
+    address: Optional[str] = None
+    photo: Optional[str] = None
+
+
+class OwnerUpdate(OwnerPatch):
     """Update Owner"""
 
-    updated: datetime = datetime.now(
-        tz=timezone(offset=-timedelta(hours=5), name="America/Bogota")
+    # WARNING! - Dont use:
+    # updated: datetime = datetime.now(
+    #                       tz=timezone(offset=-timedelta(hours=5),
+    #                       name="America/Bogota"))
+    # Use Field for default updated values
+    updated: datetime = Field(
+        default_factory=lambda: datetime.now(
+            tz=timezone(offset=-timedelta(hours=5), name="America/Bogota")
+        )
     )
 
 
