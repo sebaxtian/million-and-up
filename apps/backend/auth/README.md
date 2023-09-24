@@ -59,7 +59,7 @@ The secret files below are required:
 ## Testing
 
 ```bash
-$promt> pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src
+$promt> pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/auth/src apps/backend/auth
 ```
 
 ## How to run

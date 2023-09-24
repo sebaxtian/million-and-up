@@ -1,3 +1,5 @@
+from typing import List
+
 import pytest
 import pytest_asyncio
 from faker import Faker
@@ -43,3 +45,26 @@ async def create_owner_fixture() -> OwnerSchema:
     assert result_owner.photo == new_owner.photo
 
     return result_owner
+
+
+@pytest_asyncio.fixture()
+async def create_owners_fixture() -> List[OwnerSchema]:
+    """
+    Create 5 owners fixture
+    """
+    owners = []
+    for _ in range(0, 5):
+        created_at = fake.past_datetime()
+        new_owner = OwnerCreate(
+            **{
+                "name": fake.name(),
+                "address": fake.address(),
+                "photo": fake.file_name(category="image"),
+                "created": created_at,
+                "updated": created_at,
+            }
+        )
+        result_owner = await OwnerCRUD.create(new_owner)
+        owners.append(result_owner)
+
+    return owners

@@ -1,5 +1,8 @@
+import random
+
 import pytest
 from faker import Faker
+from fastapi import status
 
 from ..src.schemas.owner import OwnerBase, OwnerSchema
 
@@ -16,7 +19,7 @@ fake.seed_instance("million-and-up")
                 "address": fake.address(),
                 "photo": fake.file_name(category="image"),
             },
-            201,
+            status.HTTP_201_CREATED,
         ]
         # TODO: New test cases
     ],
@@ -56,7 +59,7 @@ def test_create(test_app, json_data, status_code):
                 "address": fake.address(),
                 "photo": fake.file_name(category="image"),
             },
-            200,
+            status.HTTP_200_OK,
         ]
         # TODO: New test cases
     ],
@@ -90,3 +93,25 @@ def test_update(test_app, create_owner_fixture, json_data, status_code):
     assert owner_updated.address == patch_owner.address
     assert owner_updated.photo == patch_owner.photo
     assert owner_updated.created <= owner_updated.updated
+
+
+def test_delete(test_app, create_owners_fixture):
+    """
+    Delete Owner unit test
+    Delete Owner in DB collection owners
+    """
+
+    # id from random owner fixture list
+    id = random.choice(create_owners_fixture).id
+
+    # HTTP headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": "test",
+    }
+
+    response = test_app.delete(f"/owner/delete/{id}", headers=headers)
+
+    assert response.status_code == status.HTTP_202_ACCEPTED
+    assert response.json()

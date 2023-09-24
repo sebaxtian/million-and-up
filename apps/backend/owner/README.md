@@ -55,7 +55,7 @@ The secret files below are required:
 ## Testing
 
 ```bash
-$promt> pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/owner/src
+$promt> pytest -v -s -W ignore::DeprecationWarning --cov=apps/backend/owner/src apps/backend/owner
 ```
 
 ## How to run
