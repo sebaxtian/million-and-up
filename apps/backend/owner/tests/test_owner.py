@@ -20,6 +20,7 @@ fake.seed_instance("million-and-up")
             },
             201,
         ]
+        # TODO: New test cases
     ],
 )
 def test_create(test_app, monkeypatch, json_data, status_code):
@@ -63,3 +64,61 @@ def test_create(test_app, monkeypatch, json_data, status_code):
     assert owner_created.name == new_owner.name
     assert owner_created.address == new_owner.address
     assert owner_created.photo == new_owner.photo
+
+
+@pytest.mark.parametrize(
+    "id, json_data, status_code",
+    [
+        [
+            str(ObjectId.from_datetime(fake.date_time())),
+            {
+                "name": fake.name(),
+                "address": fake.address(),
+                "photo": fake.file_name(category="image"),
+            },
+            200,
+        ]
+        # TODO: New test cases
+    ],
+)
+def test_update(test_app, monkeypatch, id, json_data, status_code):
+    """
+    Update Owner Unit Test
+    Update Owner in DB collection owners
+    """
+
+    async def mock_update(*args):
+        """Monkeypatch"""
+        test_data = OwnerSchema.from_mongo(
+            {
+                "_id": ObjectId(id),
+                "name": json_data["name"],
+                "address": json_data["address"],
+                "photo": json_data["photo"],
+                "created": fake.past_datetime(),
+                "updated": fake.date_time(),
+            }
+        )
+        return test_data
+
+    monkeypatch.setattr(OwnerCRUD, "update", mock_update)
+
+    # HTTP headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": "test",
+    }
+
+    patch_owner = OwnerBase(**json_data)
+
+    response = test_app.put(
+        f"/owner/update/{id}", headers=headers, json=patch_owner.model_dump()
+    )
+
+    assert response.status_code == status_code
+    owner_updated = OwnerSchema(**response.json())
+    assert owner_updated.name == patch_owner.name
+    assert owner_updated.address == patch_owner.address
+    assert owner_updated.photo == patch_owner.photo
+    assert owner_updated.created >= owner_updated.updated
