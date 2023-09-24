@@ -115,3 +115,21 @@ def test_delete(test_app, create_owners_fixture):
 
     assert response.status_code == status.HTTP_202_ACCEPTED
     assert response.json()
+
+
+def test_get_all(test_app, create_owners_fixture):
+    """
+    Get all Owners unit test
+    Get all Owners in DB collection owners
+    """
+    # HTTP headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": "test",
+    }
+
+    response = test_app.get("/owner/", headers=headers)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()) == len(create_owners_fixture)
