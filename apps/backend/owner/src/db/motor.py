@@ -1,3 +1,4 @@
+from mongomock_motor import AsyncMongoMockClient
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from ..config.settings import settings
@@ -22,9 +23,13 @@ class Motor:
         db: initialize AsyncIOMotorDatabase instance
         """
 
-        cls.conn = AsyncIOMotorClient(
-            settings.mongodb_url, serverSelectionTimeoutMS=timeout
-        )
+        # Pytest Mode
+        if settings.pytest_mode:
+            cls.conn = AsyncMongoMockClient()
+        else:
+            cls.conn = AsyncIOMotorClient(
+                settings.mongodb_url, serverSelectionTimeoutMS=timeout
+            )
         cls.db = cls.conn.million
 
     @classmethod
