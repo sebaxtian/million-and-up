@@ -25,7 +25,7 @@ class Motor:
         cls.conn = AsyncIOMotorClient(
             settings.mongodb_url, serverSelectionTimeoutMS=timeout
         )
-        cls.db = cls.conn.auth
+        cls.db = cls.conn.million
 
     @classmethod
     async def close(cls):

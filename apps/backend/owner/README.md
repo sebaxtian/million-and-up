@@ -46,7 +46,7 @@ Create secret files inside the **secrets** directory, those files will be ignore
 The secret files below are required:
 
 - mongodb_url
-    - [Default: mongodb://admin:admin@localhost:27017/auth?authSource=admin]
+    - [Default: mongodb://admin:admin@localhost:27017/million?authSource=admin]
 - jwt_secret_key
     - [Default: to get a string run: openssl rand -hex 32]
 - jwt_algorithm
