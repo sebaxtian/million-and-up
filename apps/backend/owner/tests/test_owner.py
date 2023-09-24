@@ -160,3 +160,30 @@ def test_get_by_id(test_app, create_owners_fixture):
 
     assert owner == random_owner
     assert owner.id == random_owner.id
+
+
+def test_get_by_name(test_app, create_owners_fixture):
+    """
+    Get Owner by name unit test
+    Get Owner by name in DB collection owners
+    """
+
+    # random owner from fixture list
+    random_owner: OwnerSchema = random.choice(create_owners_fixture)
+    # name from random owner
+    name = random_owner.name
+
+    # HTTP headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": "test",
+    }
+
+    response = test_app.get(f"/owner/name/{name}", headers=headers)
+
+    assert response.status_code == status.HTTP_200_OK
+    owners = [OwnerSchema(**owner) for owner in response.json()]
+
+    for owner in owners:
+        assert owner.name == random_owner.name
