@@ -9,3 +9,6 @@ Here is each microservice applications created by Million and Up.
 
 ## Property Service
 > [README.md](/apps/backend/property/README.md)
+
+## Property Image Service
+> [README.md](/apps/backend/property_image/README.md)
