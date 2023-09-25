@@ -80,7 +80,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> Use
         # Get the username and role from the payload
         username: str = payload.get("sub")
         role: str = payload.get("role")
-        if username is None:
+        if username is None or role is None:
             raise credentials_exception
         # Get TokenData
         token_data = TokenData(username=username, role=role)

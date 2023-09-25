@@ -18,6 +18,14 @@ app = FastAPI(version=settings.version, title=settings.name)
 app.include_router(auth.router)
 
 
+@app.get("/")
+async def root():
+    return {
+        "aboutme": "Welcome to Million and Up RESTful API - Microservices",
+        "docs": "/docs",
+    }
+
+
 @app.post("/token", response_model=TokenSchema)
 async def token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     """
