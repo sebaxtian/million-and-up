@@ -12,3 +12,6 @@ Here is each microservice applications created by Million and Up.
 
 ## Property Image Service
 > [README.md](/apps/backend/property_image/README.md)
+
+## Property Trace Service
+> [README.md](/apps/backend/property_trace/README.md)
