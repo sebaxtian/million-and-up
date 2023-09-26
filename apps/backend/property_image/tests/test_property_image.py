@@ -3,21 +3,23 @@ import random
 import pytest
 from bson import ObjectId
 from faker import Faker
+from faker_file.providers.jpeg_file import GraphicJpegFileProvider
 from fastapi import status
 
 from ..src.schemas.property_image import PropertyImageBase, PropertyImageSchema
 
 fake = Faker()
+fake.add_provider(GraphicJpegFileProvider)
 fake.seed_instance("million-and-up")
 
 
 @pytest.mark.parametrize(
-    "json_data, status_code",
+    "file, json_data, status_code",
     [
         [
+            fake.graphic_jpeg_file(),
             {
                 "id_property": str(ObjectId()),
-                "filename": fake.file_name(category="image"),
                 "enabled": fake.pybool(),
             },
             status.HTTP_201_CREATED,
@@ -25,7 +27,7 @@ fake.seed_instance("million-and-up")
         # TODO: New test cases
     ],
 )
-def test_create(test_app, json_data, status_code):
+def test_create(test_app, file, json_data, status_code):
     """
     Create PropertyImage Unit Test
     Create PropertyImage in DB collection property_images
@@ -34,22 +36,25 @@ def test_create(test_app, json_data, status_code):
     # HTTP headers
     headers = {
         "accept": "application/json",
-        "Content-Type": "application/json",
         "token": "test",
     }
-
-    new_property_image = PropertyImageBase(**json_data)
+    file_data = {
+        "file": open(f"/tmp/{file}", "rb"),
+    }
 
     response = test_app.post(
-        "/property_image/create", headers=headers, json=new_property_image.model_dump()
+        "/property_image/create",
+        headers=headers,
+        files=file_data,
+        data=json_data,
     )
 
     assert response.status_code == status_code
     property_image_created = PropertyImageSchema(**response.json())
 
-    assert property_image_created.id_property == new_property_image.id_property
-    assert property_image_created.filename == new_property_image.filename
-    assert property_image_created.enabled == new_property_image.enabled
+    assert property_image_created.id_property == json_data["id_property"]
+    assert property_image_created.filename == file.split("/")[1]
+    assert property_image_created.enabled
 
 
 @pytest.mark.parametrize(
