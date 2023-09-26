@@ -201,3 +201,57 @@ def test_get_by_name(test_app, create_properties_fixture):
 
     for property in properties:
         assert property.name == random_property.name
+
+
+@pytest.mark.parametrize(
+    "price, status_code",
+    [
+        [
+            2000,
+            status.HTTP_200_OK,
+        ],
+        [
+            0,
+            status.HTTP_200_OK,
+        ],
+        [
+            -10,
+            status.HTTP_400_BAD_REQUEST,
+        ],
+        [
+            2.50,
+            status.HTTP_200_OK,
+        ]
+        # TODO: New test cases
+    ],
+)
+def test_set_price(test_app, create_property_fixture, price, status_code):
+    """
+    Set Property price by id unit test
+    Set Property price by id in DB collection properties
+    """
+
+    # id single property fixture created
+    id = create_property_fixture.id
+
+    # HTTP headers
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "token": "test",
+    }
+
+    response = test_app.put(f"/property/price/{id}/{price}", headers=headers)
+
+    assert response.status_code == status_code
+
+    if response.status_code != status.HTTP_400_BAD_REQUEST:
+        property_updated = PropertySchema(**response.json())
+
+        assert property_updated.id_owner == create_property_fixture.id_owner
+        assert property_updated.name == create_property_fixture.name
+        assert property_updated.address == create_property_fixture.address
+        assert property_updated.price == price
+        assert property_updated.internal_code == create_property_fixture.internal_code
+        assert property_updated.year == create_property_fixture.year
+        assert property_updated.created <= property_updated.updated
