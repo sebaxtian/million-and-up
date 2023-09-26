@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     # pytest mode
     pytest_mode: bool = False
 
+    # path images folder
+    path_images: str = f"{Path(__file__).parents[2]}/images"
+
     # Handles both local and Docker environments.
     class Config:
         secrets_dir = (

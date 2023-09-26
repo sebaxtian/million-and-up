@@ -1,7 +1,8 @@
-from typing import List
+from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
+from ..config.settings import settings
 from ..crud.property_image import PropertyImageCRUD
 from ..schemas.property_image import (
     PropertyImageBase,
@@ -23,10 +24,18 @@ router = APIRouter(
 @router.post(
     "/create", response_model=PropertyImageSchema, status_code=status.HTTP_201_CREATED
 )
-async def create(property_image: PropertyImageBase) -> PropertyImageSchema:
+async def create(
+    id_property: Annotated[str, Form()], file: Annotated[UploadFile, File()]
+) -> PropertyImageSchema:
     """
     Response Model: PropertyImageSchema
     """
+    content = await file.read()
+    with open(f"{settings.path_images}/{file.filename}", "wb") as f:
+        f.write(content)
+        f.close()
+    property_image = PropertyImageBase(id_property=id_property, filename=file.filename)
+    # TODO: Check PropertyID
     return await PropertyImageCRUD.create(PropertyImageCreate(**dict(property_image)))
 
 
